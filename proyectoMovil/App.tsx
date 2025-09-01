@@ -6,9 +6,7 @@ import ProviderEvento from './Providers/ProviderEvento';
 export default function App() {
   return (
     <ProviderEvento>
-      <NavigatorContainer>
         <ButtonTabNavegador/>
-      </NavigatorContainer>
     </ProviderEvento>
   );
 }

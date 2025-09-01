@@ -1,12 +1,28 @@
 import React from 'react';
-import { View, Text, FlatList, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import { View, Text, FlatList, StyleSheet, TouchableOpacity, Image, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useContextEvento } from '../../Providers/ProviderEvento';
 import { Evento } from '../../Modelos/Eventos';
 
 export default function Home() {
-  const { listaEventos } = useContextEvento();
+  const { listaEventos, eliminarEvento } = useContextEvento();
   const navigation = useNavigation();
+
+  const confirmarEliminar = (id: string)=> {
+    Alert.alert("Confirmar Eliminacion", "¿Estás seguro de que deseas eliminar este evento?",
+      [
+        {
+          text: "Cancelar",
+          style:"cancel"
+        },
+        {
+          text: "Eliminar",
+          onPress: () => eliminarEvento(id),
+          style: "destructive"
+        }
+      ]
+    )
+  }
 
   const renderItem = ({ item }: { item: Evento }) => (
     <View style={styles.eventoCard}>
@@ -14,6 +30,9 @@ export default function Home() {
       <Text>{item.descripcion}</Text>
       <Text>Fecha: {item.fecha}</Text>
       {item.foto && <Image source={{ uri: item.foto }} style={styles.foto} />}
+      <TouchableOpacity style={styles.eliminarBoton} onPress={()=> confirmarEliminar(item.id)}>
+        <Text style={styles.eliminarTexto}>Eliminar</Text>
+      </TouchableOpacity>
     </View>
   );
 
@@ -63,4 +82,15 @@ const styles = StyleSheet.create({
   fabText: { fontSize: 24, color: 'white' },
   noEventsText: { textAlign: 'center', marginTop: 50, fontSize: 16 },
   foto: { width: '100%', height: 200, marginTop: 10, borderRadius: 10 },
+  eliminarBoton: {
+    marginTop: 10,
+    backgroundColor: '#d32f2f',
+    padding: 10,
+    borderRadius: 5,
+    alignItems: 'center',
+  },
+  eliminarTexto: {
+    color: '#fff',
+    fontWeight: 'bold',
+  }
 });
