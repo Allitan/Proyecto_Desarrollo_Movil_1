@@ -9,7 +9,7 @@ const Stack = createNativeStackNavigator();
 export default function HomeStack() {
   return (
     <Stack.Navigator>
-      <Stack.Screen name='Home' component={Home} options={{ headerShown: false }} />
+      <Stack.Screen name='Eventos' component={Home} options={{ headerShown: false }} />
       <Stack.Screen name='FormularioEvento' component={FormularioEvento} options={{ title: 'Agregar Evento' }} />
     </Stack.Navigator>
   )

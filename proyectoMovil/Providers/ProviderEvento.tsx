@@ -31,7 +31,13 @@ export default function ProviderEvento({ children }: Props) {
         try{
             const data = await AsyncStorage.getItem('eventos');
             if(data){
-                setListaEventos(JSON.parse(data));
+                const parseData = JSON.parse(data);
+                const eventosConFechas = parseData.map((evento:any) => ({
+                    ...evento,
+                    fecha: new Date(evento.fecha),
+                    hora: new Date(evento.hora)
+                }))
+                setListaEventos(eventosConFechas);
             }
         }catch(error){
             console.log('Error al listar eventos: ', error)
