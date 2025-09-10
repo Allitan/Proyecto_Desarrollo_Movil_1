@@ -1,4 +1,4 @@
-import { View, Text, Alert, TextInput, Button, StyleSheet, TouchableOpacity } from 'react-native'
+import { View, Text, Alert, TextInput, Button, StyleSheet, TouchableOpacity, Platform } from 'react-native'
 import React, { useState } from 'react'
 import { useNavigation } from '@react-navigation/native'
 import { useContextEvento } from '../../Providers/ProviderEvento'
@@ -6,15 +6,31 @@ import { Evento } from '../../Modelos/Eventos'
 import * as ImagePicker from 'expo-image-picker';
 import 'react-native-get-random-values';
 import { v4 as uuidv4 } from 'uuid'
+import DateTimePicker from '@react-native-community/datetimepicker';
 
 
 export default function FormularioEvento() {
     const [titulo, setTitulo] = useState('');
     const [descripcion, setDescripcion] = useState('');
-    const [fecha, setFecha] = useState('');
+    const [fecha, setFecha] = useState(new Date());
+    const [hora, setHora] = useState(new Date())
+    const [showDatePicker, setShowDatePicker] = useState(false);
+    const [showTimePicker, setShowTimePicker] = useState(false);
     const [foto, setFoto] = useState<string | undefined>(undefined);
     const { agregarEvento} = useContextEvento();
     const navigation = useNavigation()
+
+    const onChangeDate = (event: any, selectedDate?: Date) => {
+    const currentDate = selectedDate || fecha;
+    setShowDatePicker(Platform.OS === 'ios');
+    setFecha(currentDate);
+    };
+
+    const onChangeTime = (event: any, selectedTime?: Date) => {
+    const currentTime = selectedTime || hora;
+    setShowTimePicker(Platform.OS === 'ios');
+    setHora(currentTime);
+    };
 
     const handleGuardar = async () => {
         if(!titulo||!fecha){
@@ -27,6 +43,7 @@ export default function FormularioEvento() {
             titulo,
             descripcion,
             fecha,
+            hora,
             foto,
         }
 
@@ -55,31 +72,55 @@ export default function FormularioEvento() {
 
   return (
     <View style={styles.container}>
-        <TextInput
-         style={styles.input}
-         placeholder="Título del evento"
-         value={titulo}
-         onChangeText={setTitulo}/>
-
-        <TextInput
+      <TextInput
+        style={styles.input}
+        placeholder="Título del evento"
+        value={titulo}
+        onChangeText={setTitulo}
+      />
+      <TextInput
         style={styles.input}
         placeholder="Descripción"
         value={descripcion}
         onChangeText={setDescripcion}
-        multiline/>
+        multiline
+      />
 
-        <TextInput
-        style={styles.input}
-        placeholder="Fecha (Ej: 2025-10-27)"
-        value={fecha}
-        onChangeText={setFecha}/>
+      <TouchableOpacity onPress={() => setShowDatePicker(true)} style={styles.button}>
+        <Text style={styles.buttonText}>Seleccionar Fecha</Text>
+      </TouchableOpacity>
+      {showDatePicker && (
+        <DateTimePicker
+          value={fecha}
+          mode="date"
+          display="default"
+          onChange={onChangeDate}
+        />
+      )}
+      <Text style={styles.selectedText}>
+        Fecha seleccionada: {fecha.toLocaleDateString()}
+      </Text>
 
-        <Button title='Tomar foto' onPress={tomarFoto}/>
-        {foto && <Text style={styles.fotoText}>Foto adjuntada</Text>}
-        <Button title='Guardar Evento' onPress={handleGuardar}/>
-      
+      <TouchableOpacity onPress={() => setShowTimePicker(true)} style={styles.button}>
+        <Text style={styles.buttonText}>Seleccionar Hora</Text>
+      </TouchableOpacity>
+      {showTimePicker && (
+        <DateTimePicker
+          value={hora}
+          mode="time"
+          display="default"
+          onChange={onChangeTime}
+        />
+      )}
+      <Text style={styles.selectedText}>
+        Hora seleccionada: {hora.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+      </Text>
+
+      <Button title='Tomar foto' onPress={tomarFoto} />
+      {foto && <Text style={styles.fotoText}>Foto adjuntada</Text>}
+      <Button title='Guardar Evento' onPress={handleGuardar} />
     </View>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
@@ -94,5 +135,21 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginVertical: 10,
     color: 'green',
+  },
+  button: {
+    backgroundColor: '#03A9F4',
+    padding: 15,
+    borderRadius: 8,
+    alignItems: 'center',
+    marginBottom: 10,
+  },
+  buttonText: {
+    color: 'white',
+    fontWeight: 'bold',
+  },
+  selectedText: {
+    textAlign: 'center',
+    marginBottom: 10,
+    fontSize: 16,
   },
 });
