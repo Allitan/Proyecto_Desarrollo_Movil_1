@@ -4,11 +4,13 @@ import { useNavigation } from '@react-navigation/native';
 import { useContextEvento } from '../../Providers/ProviderEvento';
 import { Evento } from '../../Modelos/Eventos';
 
+const BACKEND_BASE_URL = 'http://192.168.79.168:3000';
+
 export default function Home() {
   const { listaEventos, eliminarEvento } = useContextEvento();
   const navigation = useNavigation();
 
-  const confirmarEliminar = (id: string)=> {
+  const confirmarEliminar = (id: number)=> {
     Alert.alert("Confirmar Eliminacion", "¿Estás seguro de que deseas eliminar este evento?",
       [
         {
@@ -30,7 +32,7 @@ export default function Home() {
       <Text>{item.descripcion}</Text>
       <Text>Fecha: {item.fecha.toLocaleDateString()}</Text>
       <Text>Hora: {item.hora.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</Text>
-      {item.foto && <Image source={{ uri: item.foto }} style={styles.foto} />}
+      {item.foto && <Image source={{ uri: `${BACKEND_BASE_URL}${item.foto}` }} style={styles.foto} />}
       <TouchableOpacity style={styles.eliminarBoton} onPress={()=> confirmarEliminar(item.id)}>
         <Text style={styles.eliminarTexto}>Eliminar</Text>
       </TouchableOpacity>
@@ -45,7 +47,7 @@ export default function Home() {
         <FlatList
           data={listaEventos}
           renderItem={renderItem}
-          keyExtractor={(item) => item.id}
+          keyExtractor={(item) => item.id.toString()}
         />
       )}
       <TouchableOpacity
