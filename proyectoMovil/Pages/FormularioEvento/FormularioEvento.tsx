@@ -4,10 +4,9 @@ import { useNavigation } from '@react-navigation/native'
 import { useContextEvento } from '../../Providers/ProviderEvento'
 import { Evento } from '../../Modelos/Eventos'
 import * as ImagePicker from 'expo-image-picker';
-import 'react-native-get-random-values';
-import { v4 as uuidv4 } from 'uuid'
 import DateTimePicker from '@react-native-community/datetimepicker';
 
+const BACKEND_URL = 'http://192.168.79.168:3000/api/eventos';
 
 export default function FormularioEvento() {
     const [titulo, setTitulo] = useState('');
@@ -17,7 +16,7 @@ export default function FormularioEvento() {
     const [showDatePicker, setShowDatePicker] = useState(false);
     const [showTimePicker, setShowTimePicker] = useState(false);
     const [foto, setFoto] = useState<string | undefined>(undefined);
-    const { agregarEvento} = useContextEvento();
+    const { listarEventos} = useContextEvento();
     const navigation = useNavigation()
 
     const onChangeDate = (event: any, selectedDate?: Date) => {
@@ -32,43 +31,74 @@ export default function FormularioEvento() {
     setHora(currentTime);
     };
 
-    const handleGuardar = async () => {
-        if(!titulo||!fecha){
-            Alert.alert('Error', 'El titulo y la fecha son obligatorios.');
-            return;
-        }
-
-        const nuevoEvento : Evento = {
-            id: uuidv4(),
-            titulo,
-            descripcion,
-            fecha,
-            hora,
-            foto,
-        }
-
-        agregarEvento(nuevoEvento);
-        navigation.goBack();
+  const handleGuardar = async () => {
+    if (!titulo || !fecha) {
+      Alert.alert('Error', 'El titulo y la fecha son obligatorios');
+      return;
     }
 
-    const tomarFoto = async () => {
-        const {status} = await ImagePicker.requestCameraPermissionsAsync();
-        if(status !== 'granted'){
-            Alert.alert('Permiso denegado', 'Necesitas dar permiso para acceder a la camara.')
-            return;
-        }
+    const formData = new FormData();
+    formData.append('titulo', titulo);
+    formData.append('descripcion', descripcion);
+    formData.append('fecha', fecha.toISOString());
+    formData.append('hora', hora.toISOString());
 
-        const results = await ImagePicker.launchCameraAsync({
-            mediaTypes: ImagePicker.MediaTypeOptions.Images,
-            allowsEditing: true,
-            aspect: [4, 3],
-            quality: 1,
-        })
+    if (foto) {
+      const filename = foto.split('/').pop();
+      const match = /\.(\w+)$/.exec(filename || '');
+      const type = match ? `image/${match[1]}` : 'image';
 
-        if(!results.canceled){
-            setFoto(results.assets[0].uri)
-        }
+      formData.append('foto', {
+        uri: foto,
+        name: filename,
+        type: type,
+      } as any);
     }
+
+    try {
+      const response = await fetch(BACKEND_URL, {
+        method: 'POST',
+        body: formData,
+        
+      });
+
+
+      if (!response.ok) {
+        const responseText = await response.text();
+        console.error(`Error del servidor: ${response.status} - ${response.statusText}`);
+        console.error('Cuerpo de la respuesta:', responseText);
+        throw new Error('Error al guardar el evento en el servidor. Revisa la consola para más detalles.');
+      }
+
+      const responseData = await response.json();
+      Alert.alert('Éxito', 'Evento guardado correctamente.');
+      await listarEventos();
+      navigation.goBack();
+    } catch (error) {
+      console.error(error);
+      Alert.alert('Error', 'No se pudo guardar el evento.');
+    }
+  };
+
+
+  const tomarFoto = async () => {
+    const { status } = await ImagePicker.requestCameraPermissionsAsync();
+    if (status !== 'granted') {
+      Alert.alert('Permiso denegado', 'Necesitas dar permiso para acceder a la camara')
+      return;
+    }
+
+    const results = await ImagePicker.launchCameraAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    })
+
+    if (!results.canceled) {
+      setFoto(results.assets[0].uri)
+    }
+  }
 
   return (
     <View style={styles.container}>
