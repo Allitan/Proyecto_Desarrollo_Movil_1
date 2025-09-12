@@ -65,7 +65,6 @@ export default function FormularioEvento() {
 
       if (!response.ok) {
         const responseText = await response.text();
-        console.error(`Error del servidor: ${response.status} - ${response.statusText}`);
         console.error('Cuerpo de la respuesta:', responseText);
         throw new Error('Error al guardar el evento en el servidor. Revisa la consola para más detalles.');
       }
