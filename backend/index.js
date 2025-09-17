@@ -78,15 +78,14 @@ app.get('/api/eventos', async (req, res) => {
 
 app.post('/api/eventos', upload.single('foto'), async (req, res) => {
     try {
-        const { titulo, descripcion, fecha, hora } = req.body;
+        const { titulo, descripcion, fechaHora} = req.body;
         // La ruta de la imagen se obtiene de req.file
         const foto = req.file ? `/uploads/${req.file.filename}` : null;
 
         const nuevoEvento = await Evento.create({
             titulo,
             descripcion,
-            fecha,
-            hora,
+            fechaHora,
             foto
         });
 

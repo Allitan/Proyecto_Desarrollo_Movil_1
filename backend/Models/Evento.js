@@ -14,11 +14,7 @@ const Evento = sequelize.define('Evento', {
   descripcion: {
     type: DataTypes.STRING,
   },
-  fecha: {
-    type: DataTypes.DATE,
-    allowNull: false
-  },
-  hora: {
+  fechaHora: {
     type: DataTypes.DATE,
     allowNull: false
   },
