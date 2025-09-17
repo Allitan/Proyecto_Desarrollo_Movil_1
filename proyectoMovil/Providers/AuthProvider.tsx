@@ -1,7 +1,7 @@
 import React, { createContext, useState, useContext, ReactNode } from 'react';
 import { Alert } from 'react-native';
 
-interface AuthContextType {
+interface AuthContextType{
     isLoggedIn: boolean;
     login: (email: string, contraseña: string) => Promise<void>;
     register: (nombre_usuario: string, email: string, contraseña: string) => Promise<void>;

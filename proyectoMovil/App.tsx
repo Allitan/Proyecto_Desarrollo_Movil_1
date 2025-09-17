@@ -6,7 +6,8 @@ import ProviderEvento from './Providers/ProviderEvento';
 import ButtonTabNavegacion from './Componentes/ButtonTabNavegacion';
 import LoginScreen from './Pages/Auth/LoginScreen';
 import RegisterScreen from './Pages/Auth/RegisterScreen';
-
+import * as Notifications from 'expo-notifications';
+import { Alert } from 'react-native';
 
 export type AuthStackParamList = {
     Login: undefined;
@@ -16,6 +17,29 @@ export type AuthStackParamList = {
 export type MainStackParamList = {
     Main: undefined;
 };
+
+Notifications.setNotificationHandler({
+    handleNotification:async() =>({
+        shouldShowAlert:true,
+        shouldPlaySound:true,
+        shouldSetBadge:true,
+    } as Notifications.NotificationBehavior),
+});
+
+async function registerForPushNotificationsAsync() {
+    const {status: existingStatus}=await Notifications.getPermissionsAsync()
+    let finalStatus=existingStatus
+
+    if (existingStatus !=='granted') {
+        const { status} =await Notifications.requestPermissionsAsync();
+        finalStatus =status;
+    }
+
+    if (finalStatus!== 'granted') {
+        Alert.alert('Permiso denegado', 'No se podrán enviar notificaciones');
+    }
+}
+
 
 const AuthStack = createNativeStackNavigator<AuthStackParamList>();
 const MainStack = createNativeStackNavigator<MainStackParamList>();
@@ -45,6 +69,9 @@ function RootNavigator() {
 }
 
 export default function App() {
+    React.useEffect(() => {
+        registerForPushNotificationsAsync();
+    }, []);
     return (
         <AuthProvider>
             <ProviderEvento>

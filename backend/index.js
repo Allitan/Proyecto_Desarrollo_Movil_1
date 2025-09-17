@@ -32,6 +32,7 @@ sequelize.sync().then(() => {
 
 
 
+
 // Ruta de Registro
 app.post('/api/auth/registro', async (req, res) => {
     try {

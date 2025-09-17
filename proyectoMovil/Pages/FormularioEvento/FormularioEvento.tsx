@@ -35,10 +35,18 @@ export default function FormularioEvento() {
       return;
     }
 
-    const formData = new FormData();
-    formData.append('titulo', titulo);
-    formData.append('descripcion', descripcion);
-    formData.append('fecha', fecha.toISOString());
+    const eventDate = new Date(
+        fecha.getFullYear(),
+        fecha.getMonth(),
+        fecha.getDate(),
+        hora.getHours(),
+        hora.getMinutes()
+    )
+
+    const formData = new FormData()
+    formData.append('titulo', titulo)
+    formData.append('descripcion', descripcion)
+    formData.append('fecha', fecha.toISOString())
     formData.append('hora', hora.toISOString());
 
     if (foto) {
@@ -53,7 +61,7 @@ export default function FormularioEvento() {
     }
     await agregarEvento(formData);
     navigation.goBack();
-  };
+  }
 
   const tomarFoto = async () => {
     const { status } = await ImagePicker.requestCameraPermissionsAsync();
