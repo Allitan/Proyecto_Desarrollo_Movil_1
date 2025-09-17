@@ -30,21 +30,32 @@ export default function ProviderEvento({ children }: Props) {
 
             const newEvent:Evento =await response.json()
 
+            console.log('Datos del evento recibidos del servidor:', newEvent);
+            console.log('Fecha del evento:', newEvent.fecha);
+            console.log('Hora del evento:', newEvent.hora);
+
             Alert.alert('Éxito', 'Evento guardado correctamente');
             await listarEventos();
 
             //Compañeros aqui agendamos la notificacion
-            const scheduleDate = new Date(newEvent.fechaHora)
-            const now = new Date();
+            const eventDate = new Date(newEvent.fecha)
+            const eventTime = new Date(newEvent.hora)
 
-            let secondsUntilEvent = (scheduleDate.getTime() -now.getTime()) / 1000;
+            const scheduleDate = new Date(
+                eventDate.getFullYear(),
+                eventDate.getMonth(),
+                eventDate.getDate(),
+                eventTime.getHours(),
+                eventTime.getMinutes(),
+            );
 
-            if (secondsUntilEvent > 5) {
-                const trigger: Notifications.NotificationTriggerInput = {
-                    seconds: secondsUntilEvent,
-                    type: 'seconds',
-                }
+            const secondsUntilEvent = (scheduleDate.getTime() - new Date().getTime()) / 1000;
+            const trigger: Notifications.NotificationTriggerInput = {
+                seconds: secondsUntilEvent,
+                type: 'seconds',
+            } 
 
+            if (secondsUntilEvent > 0) {
                 await Notifications.scheduleNotificationAsync({
                     content: {
                         title: `¡Recordatorio de evento! 🔔`,
@@ -52,10 +63,7 @@ export default function ProviderEvento({ children }: Props) {
                     },
                     trigger,
                 });
-
             }
-
-
         } catch (error) {
             console.error('Error en agregarEvento:', error);
             Alert.alert('Error', 'No se pudo guardar el evento');
@@ -71,7 +79,8 @@ export default function ProviderEvento({ children }: Props) {
             const data = await response.json();
             const eventosConFechas = data.map((evento: any) => ({
                 ...evento,
-                fechaHora: new Date(evento.fechaHora),
+                fecha: new Date(evento.fecha),
+                hora: new Date(evento.hora)
             }));
             setListaEventos(eventosConFechas);
         }catch(error){

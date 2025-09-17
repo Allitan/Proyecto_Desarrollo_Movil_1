@@ -35,19 +35,19 @@ export default function FormularioEvento() {
       return;
     }
 
-    const fechaHoraCombinada = new Date(
-      fecha.getFullYear(),
-      fecha.getMonth(),
-      fecha.getDate(),
-      hora.getHours(),
-      hora.getMinutes()
-    );
-
+    const eventDate = new Date(
+        fecha.getFullYear(),
+        fecha.getMonth(),
+        fecha.getDate(),
+        hora.getHours(),
+        hora.getMinutes()
+    )
 
     const formData = new FormData()
     formData.append('titulo', titulo)
     formData.append('descripcion', descripcion)
-    formData.append('fechaHora', fechaHoraCombinada.toISOString());
+    formData.append('fecha', fecha.toISOString())
+    formData.append('hora', hora.toISOString());
 
     if (foto) {
       const filename = foto.split('/').pop();

@@ -2,6 +2,7 @@ export interface Evento{
     id: number
     titulo: string
     descripcion: string
-    fechaHora: Date
+    fecha: Date
+    hora: Date
     foto?:string
 }

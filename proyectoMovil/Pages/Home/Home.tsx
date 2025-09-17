@@ -30,10 +30,10 @@ export default function Home() {
     <View style={styles.eventoCard}>
       <Text style={styles.titulo}>{item.titulo}</Text>
       <Text>{item.descripcion}</Text>
-      <Text>Fecha: {item.fechaHora.toLocaleDateString()}</Text>
-      <Text>Hora: {item.fechaHora.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</Text>
+      <Text>Fecha: {item.fecha.toLocaleDateString()}</Text>
+      <Text>Hora: {item.hora.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</Text>
       {item.foto && <Image source={{ uri: `${BACKEND_BASE_URL}${item.foto}` }} style={styles.foto} />}
-      <TouchableOpacity style={styles.eliminarBoton} onPress={() => confirmarEliminar(item.id)}>
+      <TouchableOpacity style={styles.eliminarBoton} onPress={()=> confirmarEliminar(item.id)}>
         <Text style={styles.eliminarTexto}>Eliminar</Text>
       </TouchableOpacity>
     </View>
