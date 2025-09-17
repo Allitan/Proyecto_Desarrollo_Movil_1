@@ -3,7 +3,7 @@ import { Evento } from "../Modelos/Eventos";
 
 export const contextEvento = createContext({
     listaEventos: [] as Evento[],
-    agregarEvento: (evento: Evento) => {},
+    agregarEvento: (eventoFormData: FormData) => {},
     listarEventos: () => {},
     eliminarEvento: (id: number) => {}
 })
