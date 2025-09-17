@@ -17,8 +17,21 @@ export default function ProviderEvento({ children }: Props) {
         listarEventos();
     }, [])
 
-    async function agregarEvento(evento: Evento){
-        await listarEventos();
+    async function agregarEvento(eventoFormData: FormData){
+        try {
+            const response = await fetch(BACKEND_URL, {
+                method: 'POST',
+                body: eventoFormData,
+            });
+            if (!response.ok) {
+                throw new Error('Error al guardar el evento en el servidor.');
+            }
+            Alert.alert('Éxito', 'Evento guardado correctamente.');
+            await listarEventos();
+        } catch (error) {
+            console.error('Error en agregarEvento:', error);
+            Alert.alert('Error', 'No se pudo guardar el evento.');
+        }
     }
 
     async function listarEventos(){

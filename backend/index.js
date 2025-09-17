@@ -1,8 +1,10 @@
 const express= require('express');
 const sequelize = require('./Connection/database');
 const Evento = require('./Models/Evento');
+const Usuario = require('./Models/Usuario');
 const multer = require('multer');
 const path = require('path');
+const bcrypt = require('bcryptjs')
 
 const app = express();
 const PORT = 3000;
@@ -26,6 +28,40 @@ sequelize.sync().then(() => {
     console.log('Base de datos y tabla "eventos" creadas y conectadas.');
 }).catch(err => {
     console.error('Error al sincronizar con la base de datos:', err);
+});
+
+
+
+// Ruta de Registro
+app.post('/api/auth/registro', async (req, res) => {
+    try {
+        const { nombre_usuario, email, contraseña } = req.body;
+        const hashedPassword = await bcrypt.hash(contraseña, 10);
+        
+        const nuevoUsuario = await Usuario.create({
+            nombre_usuario,
+            email,
+            contraseña: hashedPassword
+        });
+
+        res.status(201).json({ mensaje: 'Usuario registrado con éxito' });
+    } catch (error) {
+        res.status(500).json({ error: 'Error al registrar el usuario', details: error.message });
+    }
+});
+
+// Ruta de Inicio de Sesión
+app.post('/api/auth/login', async (req, res) => {
+    try {
+        const { email, contraseña } = req.body;
+        const usuario = await Usuario.findOne({ where: { email } });
+        if (!usuario) { return res.status(404).json({ error: 'Usuario no encontrado.' }); }
+        const esValido = await bcrypt.compare(contraseña, usuario.contraseña);
+        if (!esValido) { return res.status(401).json({ error: 'Contraseña incorrecta.' }); }
+        res.json({ mensaje: 'Inicio de sesión exitoso.' });
+    } catch (error) {
+        res.status(500).json({ error: 'Error al iniciar sesión', details: error.message });
+    }
 });
 
 // Ruta para obtener todos los eventos

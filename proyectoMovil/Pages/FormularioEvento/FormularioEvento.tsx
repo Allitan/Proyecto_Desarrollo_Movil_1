@@ -2,38 +2,36 @@ import { View, Text, Alert, TextInput, Button, StyleSheet, TouchableOpacity, Pla
 import React, { useState } from 'react'
 import { useNavigation } from '@react-navigation/native'
 import { useContextEvento } from '../../Providers/ProviderEvento'
-import { Evento } from '../../Modelos/Eventos'
 import * as ImagePicker from 'expo-image-picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
 
-const BACKEND_URL = 'http://192.168.79.168:3000/api/eventos';
 
 export default function FormularioEvento() {
-    const [titulo, setTitulo] = useState('');
-    const [descripcion, setDescripcion] = useState('');
-    const [fecha, setFecha] = useState(new Date());
-    const [hora, setHora] = useState(new Date())
-    const [showDatePicker, setShowDatePicker] = useState(false);
-    const [showTimePicker, setShowTimePicker] = useState(false);
-    const [foto, setFoto] = useState<string | undefined>(undefined);
-    const { listarEventos} = useContextEvento();
-    const navigation = useNavigation()
+  const [titulo, setTitulo] = useState('');
+  const [descripcion, setDescripcion] = useState('');
+  const [fecha, setFecha] = useState(new Date());
+  const [hora, setHora] = useState(new Date())
+  const [showDatePicker, setShowDatePicker] = useState(false);
+  const [showTimePicker, setShowTimePicker] = useState(false);
+  const [foto, setFoto] = useState<string | undefined>(undefined);
+  const { agregarEvento } = useContextEvento();
+  const navigation = useNavigation()
 
-    const onChangeDate = (event: any, selectedDate?: Date) => {
+  const onChangeDate = (event: any, selectedDate?: Date) => {
     const currentDate = selectedDate || fecha;
     setShowDatePicker(Platform.OS === 'ios');
     setFecha(currentDate);
-    };
+  };
 
-    const onChangeTime = (event: any, selectedTime?: Date) => {
+  const onChangeTime = (event: any, selectedTime?: Date) => {
     const currentTime = selectedTime || hora;
     setShowTimePicker(Platform.OS === 'ios');
     setHora(currentTime);
-    };
+  };
 
   const handleGuardar = async () => {
     if (!titulo || !fecha) {
-      Alert.alert('Error', 'El titulo y la fecha son obligatorios');
+      Alert.alert('Error', 'El título y la fecha son obligatorios');
       return;
     }
 
@@ -47,38 +45,15 @@ export default function FormularioEvento() {
       const filename = foto.split('/').pop();
       const match = /\.(\w+)$/.exec(filename || '');
       const type = match ? `image/${match[1]}` : 'image';
-
       formData.append('foto', {
         uri: foto,
         name: filename,
         type: type,
       } as any);
     }
-
-    try {
-      const response = await fetch(BACKEND_URL, {
-        method: 'POST',
-        body: formData,
-        
-      });
-
-
-      if (!response.ok) {
-        const responseText = await response.text();
-        console.error('Cuerpo de la respuesta:', responseText);
-        throw new Error('Error al guardar el evento en el servidor. Revisa la consola para más detalles.');
-      }
-
-      const responseData = await response.json();
-      Alert.alert('Éxito', 'Evento guardado correctamente.');
-      await listarEventos();
-      navigation.goBack();
-    } catch (error) {
-      console.error(error);
-      Alert.alert('Error', 'No se pudo guardar el evento.');
-    }
+    await agregarEvento(formData);
+    navigation.goBack();
   };
-
 
   const tomarFoto = async () => {
     const { status } = await ImagePicker.requestCameraPermissionsAsync();
@@ -93,7 +68,6 @@ export default function FormularioEvento() {
       aspect: [4, 3],
       quality: 1,
     })
-
     if (!results.canceled) {
       setFoto(results.assets[0].uri)
     }
@@ -114,7 +88,6 @@ export default function FormularioEvento() {
         onChangeText={setDescripcion}
         multiline
       />
-
       <TouchableOpacity onPress={() => setShowDatePicker(true)} style={styles.button}>
         <Text style={styles.buttonText}>Seleccionar Fecha</Text>
       </TouchableOpacity>
@@ -129,7 +102,6 @@ export default function FormularioEvento() {
       <Text style={styles.selectedText}>
         Fecha seleccionada: {fecha.toLocaleDateString()}
       </Text>
-
       <TouchableOpacity onPress={() => setShowTimePicker(true)} style={styles.button}>
         <Text style={styles.buttonText}>Seleccionar Hora</Text>
       </TouchableOpacity>
@@ -144,14 +116,12 @@ export default function FormularioEvento() {
       <Text style={styles.selectedText}>
         Hora seleccionada: {hora.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
       </Text>
-
       <Button title='Tomar foto' onPress={tomarFoto} />
       {foto && <Text style={styles.fotoText}>Foto adjuntada</Text>}
       <Button title='Guardar Evento' onPress={handleGuardar} />
     </View>
   );
 }
-
 const styles = StyleSheet.create({
   container: { flex: 1, padding: 20, backgroundColor: '#f0f0f0' },
   input: {
