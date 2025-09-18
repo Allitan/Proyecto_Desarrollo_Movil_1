@@ -9,6 +9,7 @@ import LoginScreen from './Pages/Auth/LoginScreen';
 import RegisterScreen from './Pages/Auth/RegisterScreen';
 import * as Notifications from 'expo-notifications';
 import { Alert } from 'react-native';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 export type AuthStackParamList = {
     Login:undefined;
@@ -48,7 +49,8 @@ function MainScreens() {
 }
 
 function RootNavigator() {
-    const { isLoggedIn } = useAuth();
+  const { isLoggedIn } = useAuth();
+  
     return isLoggedIn ? <MainScreens /> : <AuthScreens />;
 }
 
