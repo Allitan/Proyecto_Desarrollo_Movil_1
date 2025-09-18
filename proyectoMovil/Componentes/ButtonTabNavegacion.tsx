@@ -1,13 +1,13 @@
 import { View, Text } from 'react-native'
 import React from 'react'
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs'
 import HomeStack from './HomeStack'
 import Notificaciones from '../Pages/Notificaciones/Notificaciones'
 import ControlarNotificaciones from '../Pages/ControlarNotificaciones/ControlarNotificaciones'
 
-export default function BottonTabNavegacion() {
+export default function BottonTabNavegacion(){
 
-    const Tab = createBottomTabNavigator();
+    const Tab =createBottomTabNavigator();
 
   return (
         <Tab.Navigator>

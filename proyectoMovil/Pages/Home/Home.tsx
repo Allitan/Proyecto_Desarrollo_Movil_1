@@ -26,7 +26,7 @@ export default function Home() {
     )
   }
 
-  const renderItem = ({ item }: { item: Evento }) => (
+  const renderItem=({ item }: { item: Evento }) => (
     <View style={styles.eventoCard}>
       <Text style={styles.titulo}>{item.titulo}</Text>
       <Text>{item.descripcion}</Text>

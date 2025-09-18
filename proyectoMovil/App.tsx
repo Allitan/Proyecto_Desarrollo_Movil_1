@@ -11,24 +11,24 @@ import * as Notifications from 'expo-notifications';
 import { Alert } from 'react-native';
 
 export type AuthStackParamList = {
-    Login: undefined;
-    Register: undefined;
+    Login:undefined;
+    Register:undefined;
 }
 
-export type MainStackParamList = {
+export type MainStackParamList ={
     Main: undefined;
 };
 
 Notifications.setNotificationHandler({
-    handleNotification: async () => ({
+    handleNotification: async () =>({
         shouldShowAlert: true,
         shouldPlaySound: true,
         shouldSetBadge: true,
     } as Notifications.NotificationBehavior),
 });
 
-const AuthStack = createNativeStackNavigator<AuthStackParamList>();
-const MainStack = createNativeStackNavigator<MainStackParamList>();
+const AuthStack = createNativeStackNavigator<AuthStackParamList>()
+const MainStack = createNativeStackNavigator<MainStackParamList>()
 
 function AuthScreens() {
     return (

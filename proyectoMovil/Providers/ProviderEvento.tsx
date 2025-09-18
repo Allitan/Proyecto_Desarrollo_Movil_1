@@ -10,7 +10,7 @@ interface Props {
     children: ReactNode
 }
 
-const BACKEND_URL = 'http://192.168.79.168:3000/api/eventos';
+const BACKEND_URL = 'http://192.168.79.168:3000/api/eventos'
 
 export default function ProviderEvento({ children }: Props) {
     const [listaEventos, setListaEventos] = useState<Evento[]>([]);
@@ -18,7 +18,7 @@ export default function ProviderEvento({ children }: Props) {
 
     useEffect(() => {
         listarEventos();
-    }, [])
+    },[])
 
     async function agregarEvento(eventoFormData: FormData) {
         try {
@@ -27,11 +27,11 @@ export default function ProviderEvento({ children }: Props) {
                 body: eventoFormData,
             });
             if (!response.ok) {
-                throw new Error('Error al guardar el evento en el servidor');
+                throw new Error('Error al guardar el evento en el servidor')
             }
 
             const newEvent: Evento = await response.json()
-            Alert.alert('Éxito', 'Evento guardado correctamente');
+            Alert.alert('Éxito', 'Evento guardado correctamente')
             await listarEventos();
 
             // SOLO AGENDAMOS Y GUARDAMOS EN HISTORIAL SI EL USUARIO LAS HABILITÓ
@@ -50,7 +50,7 @@ export default function ProviderEvento({ children }: Props) {
                 const secondsUntilEvent = (scheduleDate.getTime() - new Date().getTime()) / 1000;
 
                 if (secondsUntilEvent > 0) {
-                    const trigger: Notifications.NotificationTriggerInput = {
+                    const trigger: Notifications.NotificationTriggerInput={
                         seconds: secondsUntilEvent,
                         type: 'seconds',
                     }
@@ -75,7 +75,7 @@ export default function ProviderEvento({ children }: Props) {
         }
     }
 
-    async function listarEventos() {
+    async function listarEventos(){
         try {
             const response = await fetch(BACKEND_URL);
             if (!response.ok) {
@@ -94,7 +94,7 @@ export default function ProviderEvento({ children }: Props) {
         }
     }
 
-    async function eliminarEvento(id: number) {
+    async function eliminarEvento(id: number){
         try {
             const response = await fetch(`${BACKEND_URL}/${id}`, {
                 method: 'DELETE',

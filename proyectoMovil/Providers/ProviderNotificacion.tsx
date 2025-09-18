@@ -5,13 +5,13 @@ import * as Notifications from 'expo-notifications';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 interface NotificacionContextType {
-    notificaciones: Notificacion[];
-    agregarNotificacion: (titulo: string, cuerpo: string) => void;
+    notificaciones: Notificacion[]
+    agregarNotificacion: (titulo: string, cuerpo: string) => void
     notificacionesHabilitadas: boolean;
-    setNotificacionesHabilitadas: (habilitado: boolean) => Promise<void>;
+    setNotificacionesHabilitadas: (habilitado: boolean) => Promise<void>
 }
 
-const NotificacionContext = createContext<NotificacionContextType | undefined>(undefined);
+const NotificacionContext = createContext<NotificacionContextType | undefined>(undefined)
 
 interface Props {
     children: ReactNode;
