@@ -110,8 +110,14 @@ app.delete('/api/eventos/:id', async (req, res) => {
     }
 });
 
-app.listen(PORT, () => {
-    console.log(`Servidor corriendo en http://localhost:${PORT}`);
+//app.listen(PORT, () => {
+//    console.log(`Servidor corriendo en http://localhost:${PORT}`);
+//});
+
+const HOST = '0.0.0.0'; // escucha en todas las interfaces
+
+app.listen(PORT, HOST, () => {
+    console.log(`Servidor corriendo en http://192.168.79.168:${PORT}`);
 });
 
 
