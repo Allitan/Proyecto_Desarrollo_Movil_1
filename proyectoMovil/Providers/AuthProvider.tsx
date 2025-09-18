@@ -4,27 +4,27 @@ import { Alert } from 'react-native';
 interface AuthContextType{
     isLoggedIn: boolean;
     login: (email: string, contraseña: string) => Promise<void>;
-    register: (nombre_usuario: string, email: string, contraseña: string) => Promise<void>;
-    logout: () => void;
+    register: (nombre_usuario: string, email: string, contraseña: string) => Promise<void>
+    logout: () => void
 }
 
-export const AuthContext = createContext<AuthContextType | undefined>(undefined);
+export const AuthContext =createContext<AuthContextType | undefined>(undefined)
 
 const BACKEND_URL = 'http://192.168.79.168:3000/api/auth';
 interface Props { children: ReactNode; }
 
-export const AuthProvider = ({ children }: Props) => {
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
+export const AuthProvider = ({ children }: Props)=> {
+    const [isLoggedIn, setIsLoggedIn] = useState(false)
 
-    const login = async (email:string, contraseña:string) => {
+    const login = async (email:string, contraseña:string) =>{
         try {
             const response = await fetch(`${BACKEND_URL}/login`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email, contraseña }),
             });
-            const data = await response.json();
-            if (response.ok) {
+            const data =await response.json();
+            if (response.ok){
                 setIsLoggedIn(true);
                 Alert.alert('Éxito', data.mensaje);
             } else {
@@ -42,18 +42,18 @@ export const AuthProvider = ({ children }: Props) => {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ nombre_usuario, email, contraseña }),
             });
-            const data = await response.json();
+            const data = await response.json()
             if (response.ok) {
-                Alert.alert('Éxito', data.mensaje);
+                Alert.alert('Éxito', data.mensaje)
             } else {
-                Alert.alert('Error', data.error || 'Error en el registro');
+                Alert.alert('Error', data.error || 'Error en el registro')
             }
         } catch (e) {
-            Alert.alert('Error', 'No se pudo registrar. Revisa tu conexión.');
+            Alert.alert('Error', 'No se pudo registrar. Revisa tu conexión.')
         }
     };
 
-    const logout = () => { setIsLoggedIn(false); };
+    const logout = () => { setIsLoggedIn(false); }
 
     return (
         <AuthContext.Provider value={{ isLoggedIn, login, register, logout }}>
