@@ -4,20 +4,20 @@ import { useAuth } from '../../Providers/AuthProvider';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { AuthStackParamList } from '../../App';
 
-type RegisterScreenProps = NativeStackScreenProps<AuthStackParamList, 'Register'>;
+type RegisterScreenProps=NativeStackScreenProps<AuthStackParamList, 'Register'>;
 
-export default function RegisterScreen({navigation}: RegisterScreenProps) {
-    const [nombre_usuario, setNombreUsuario] = useState('');
-    const [email, setEmail] = useState('');
-    const [contraseña, setContraseña] = useState('');
-    const { register } = useAuth();
+export default function RegisterScreen({navigation}:RegisterScreenProps) {
+    const [nombre_usuario, setNombreUsuario] = useState('')
+    const [email, setEmail] = useState('')
+    const [contraseña, setContraseña] = useState('')
+    const {register} = useAuth()
 
     const handleRegister = () => {
         if (!nombre_usuario || !email || !contraseña) {
-            Alert.alert('Error', 'Todos los campos son obligatorios.');
+            Alert.alert('Error', 'Todos los campos son obligatorios.')
             return;
         }
-        register(nombre_usuario, email, contraseña);
+        register(nombre_usuario, email, contraseña)
     };
 
     return (
@@ -43,7 +43,7 @@ export default function RegisterScreen({navigation}: RegisterScreenProps) {
                 value={contraseña}
                 onChangeText={setContraseña}
             />
-            <Button title="Registrar" onPress={handleRegister} />
+            <Button title="Registrar"onPress={handleRegister} />
             <Button
                 title="¿Ya tienes cuenta? Inicia Sesión"
                 onPress={() => navigation.navigate('Login')}

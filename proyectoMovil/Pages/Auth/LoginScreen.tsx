@@ -4,20 +4,20 @@ import { useAuth } from '../../Providers/AuthProvider';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { AuthStackParamList } from '../../App';
 
-type LoginScreenProps = NativeStackScreenProps<AuthStackParamList, 'Login'>;
+type LoginScreenProps =NativeStackScreenProps<AuthStackParamList, 'Login'>;
 
-export default function LoginScreen({navigation}: LoginScreenProps) {
-    const [email, setEmail] = useState('');
-    const [contraseña, setContraseña] = useState('');
-    const { login } = useAuth();
+export default function LoginScreen({navigation}:LoginScreenProps){
+    const [email, setEmail] = useState('')
+    const [contraseña, setContraseña] = useState('')
+    const { login} =useAuth();
 
-    const handleLogin = () => {
-        if (!email || !contraseña) {
-            Alert.alert('Error', 'Por favor, ingresa tu email y contraseña.');
+    const handleLogin=() => {
+        if (!email || !contraseña){
+            Alert.alert('Error','Por favor, ingresa tu email y contraseña.');
             return;
         }
-        login(email, contraseña);
-    };
+        login(email,contraseña);
+    }
 
     return (
         <View style={styles.container}>
@@ -39,7 +39,7 @@ export default function LoginScreen({navigation}: LoginScreenProps) {
             <Button title="Iniciar Sesión" onPress={handleLogin} />
             <Button
                 title="¿No tienes cuenta? Regístrate"
-                onPress={() => navigation.navigate('Register')}
+                onPress={()=> navigation.navigate('Register')}
             />
         </View>
     );

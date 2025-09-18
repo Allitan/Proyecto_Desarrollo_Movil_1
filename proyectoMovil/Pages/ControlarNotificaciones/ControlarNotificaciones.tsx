@@ -1,27 +1,12 @@
-import React, { useState } from "react";
-import { View, Text, Switch, StyleSheet, Alert } from "react-native";
-import * as Notifications from "expo-notifications";
+import React from "react";
+import { View, Text, Switch, StyleSheet } from "react-native";
+import { useNotificaciones } from "../../Providers/ProviderNotificacion";
 
 const NotificationsScreen: React.FC = () => {
-  const [isEnabled, setIsEnabled] = useState(false);
+  const { notificacionesHabilitadas, setNotificacionesHabilitadas} = useNotificaciones()
 
-  const handleToggle = async () => {
-    const newValue = !isEnabled;
-    setIsEnabled(newValue);
-
-    if (newValue) {
-      const { status } = await Notifications.requestPermissionsAsync();
-
-      if (status !== "granted") {
-        Alert.alert("Permiso denegado", "No se podrán enviar notificaciones.");
-        setIsEnabled(false);
-        return;
-      }
-
-      Alert.alert("Notificaciones habilitadas", "Se enviará una notificación de prueba en 5s.");
-    } else {
-      Alert.alert("Notificaciones desactivadas", "Ya no recibirás notificaciones.");
-    }
+  const handleToggle = ()=>{
+    setNotificacionesHabilitadas(!notificacionesHabilitadas);
   };
 
   return (
@@ -29,10 +14,10 @@ const NotificationsScreen: React.FC = () => {
       <Text style={styles.label}>¿Deseas recibir notificaciones?</Text>
       <Switch
         trackColor={{ false: "#767577", true: "#81b0ff" }}
-        thumbColor={isEnabled ? "#f5dd4b" : "#f4f3f4"}
+        thumbColor={notificacionesHabilitadas ? "#f5dd4b" : "#f4f3f4"}
         ios_backgroundColor="#3e3e3e"
         onValueChange={handleToggle}
-        value={isEnabled}
+        value={notificacionesHabilitadas}
       />
     </View>
   );
@@ -40,9 +25,9 @@ const NotificationsScreen: React.FC = () => {
 
 export default NotificationsScreen;
 
-const styles = StyleSheet.create({
+const styles =StyleSheet.create({
   container: {
-    flex: 1,
+    flex:1,
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: "#fff",
