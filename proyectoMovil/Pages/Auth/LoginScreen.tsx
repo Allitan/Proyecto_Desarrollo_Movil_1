@@ -6,17 +6,17 @@ import { AuthStackParamList } from '../../App';
 
 type LoginScreenProps = NativeStackScreenProps<AuthStackParamList, 'Login'>;
 
-export default function LoginScreen({navigation}: LoginScreenProps) {
-    const [email, setEmail] = useState('');
-    const [contraseña, setContraseña] = useState('');
+export default function LoginScreen({navigation}:LoginScreenProps){
+    const [email, setEmail] = useState('')
+    const [contraseña, setContraseña] = useState('')
     const { login } = useAuth();
 
     const handleLogin = () => {
-        if (!email || !contraseña) {
+        if (!email || !contraseña){
             Alert.alert('Error', 'Por favor, ingresa tu email y contraseña.');
             return;
         }
-        login(email, contraseña);
+        login(email,contraseña);
     };
 
     return (
