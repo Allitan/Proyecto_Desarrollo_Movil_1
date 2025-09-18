@@ -10,30 +10,23 @@ export default function Home() {
   const { listaEventos, eliminarEvento } = useContextEvento();
   const navigation = useNavigation();
 
-  const confirmarEliminar = (id: number)=> {
-    Alert.alert("Confirmar Eliminacion", "¿Estás seguro de que deseas eliminar este evento?",
+  const confirmarEliminar = (id: number) => {
+    Alert.alert("Confirmar Eliminación", "¿Estás seguro de que deseas eliminar este evento?",
       [
-        {
-          text: "Cancelar",
-          style:"cancel"
-        },
-        {
-          text: "Eliminar",
-          onPress: () => eliminarEvento(id),
-          style: "destructive"
-        }
+        { text: "Cancelar", style: "cancel" },
+        { text: "Eliminar", onPress: () => eliminarEvento(id), style: "destructive" }
       ]
     )
   }
 
-  const renderItem=({ item }: { item: Evento }) => (
+  const renderItem = ({ item }: { item: Evento }) => (
     <View style={styles.eventoCard}>
-      <Text style={styles.titulo}>{item.titulo}</Text>
-      <Text>{item.descripcion}</Text>
-      <Text>Fecha: {item.fecha.toLocaleDateString()}</Text>
-      <Text>Hora: {item.hora.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</Text>
       {item.foto && <Image source={{ uri: `${BACKEND_BASE_URL}${item.foto}` }} style={styles.foto} />}
-      <TouchableOpacity style={styles.eliminarBoton} onPress={()=> confirmarEliminar(item.id)}>
+      <Text style={styles.titulo}>{item.titulo}</Text>
+      <Text style={styles.descripcion}>{item.descripcion}</Text>
+      <Text style={styles.fecha}>Fecha: {item.fecha.toLocaleDateString()}</Text>
+      <Text style={styles.hora}>Hora: {item.hora.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</Text>
+      <TouchableOpacity style={styles.eliminarBoton} onPress={() => confirmarEliminar(item.id)}>
         <Text style={styles.eliminarTexto}>Eliminar</Text>
       </TouchableOpacity>
     </View>
@@ -48,6 +41,7 @@ export default function Home() {
           data={listaEventos}
           renderItem={renderItem}
           keyExtractor={(item) => item.id.toString()}
+          contentContainerStyle={{ paddingBottom: 100 }}
         />
       )}
       <TouchableOpacity
@@ -61,39 +55,78 @@ export default function Home() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 16 },
+  container: {
+    flex: 1,
+    padding: 16,
+    backgroundColor: '#f8f9fa', // gris claro tipo Bootstrap
+  },
   eventoCard: {
-    padding: 15,
-    marginVertical: 8,
     backgroundColor: '#fff',
-    borderRadius: 10,
-    elevation: 2,
+    borderRadius: 12,
+    padding: 16,
+    marginVertical: 8,
+    shadowColor: "#000",
+    shadowOpacity: 0.1,
+    shadowOffset: { width: 0, height: 3 },
+    shadowRadius: 6,
+    elevation: 3,
   },
-  titulo: { fontSize: 18, fontWeight: 'bold' },
-  fab: {
-    position: 'absolute',
-    width: 56,
-    height: 56,
-    alignItems: 'center',
-    justifyContent: 'center',
-    right: 20,
-    bottom: 20,
-    backgroundColor: '#03A9F4',
-    borderRadius: 30,
-    elevation: 8,
-  },
-  fabText: { fontSize: 24, color: 'white' },
-  noEventsText: { textAlign: 'center', marginTop: 50, fontSize: 16 },
-  foto: { width: '100%', height: 200, marginTop: 10, borderRadius: 10 },
-  eliminarBoton: {
+  titulo: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#212529',
     marginTop: 10,
+  },
+  descripcion: {
+    fontSize: 16,
+    color: '#495057',
+    marginVertical: 6,
+  },
+  fecha: {
+    fontSize: 14,
+    color: '#868e96',
+  },
+  hora: {
+    fontSize: 14,
+    color: '#868e96',
+    marginBottom: 8,
+  },
+  foto: {
+    width: '100%',
+    height: 200,
+    borderRadius: 12,
+  },
+  eliminarBoton: {
     backgroundColor: '#d32f2f',
     padding: 10,
-    borderRadius: 5,
+    borderRadius: 8,
     alignItems: 'center',
+    marginTop: 8,
   },
   eliminarTexto: {
     color: '#fff',
     fontWeight: 'bold',
-  }
+  },
+  fab: {
+    position: 'absolute',
+    width: 60,
+    height: 60,
+    alignItems: 'center',
+    justifyContent: 'center',
+    right: 20,
+    bottom: 20,
+    backgroundColor: '#0d6efd', // azul Bootstrap
+    borderRadius: 30,
+    elevation: 8,
+  },
+  fabText: {
+    fontSize: 30,
+    color: 'white',
+  },
+  noEventsText: {
+    textAlign: 'center',
+    marginTop: 50,
+    fontSize: 18,
+    color: '#6c757d',
+  },
 });
