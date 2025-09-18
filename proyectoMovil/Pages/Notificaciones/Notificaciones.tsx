@@ -4,7 +4,7 @@ import { useNotificaciones } from '../../Providers/ProviderNotificacion';
 import { Notificacion } from '../../Modelos/Notificacion';
 
 export default function HistorialNotificaciones() {
-  const { notificaciones } = useNotificaciones();
+  const {notificaciones} = useNotificaciones();
 
   const renderItem = ({ item }: {item: Notificacion}) => (
     <View style={styles.notificacionCard}>

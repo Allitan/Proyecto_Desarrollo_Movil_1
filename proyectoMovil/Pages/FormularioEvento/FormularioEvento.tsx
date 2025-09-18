@@ -7,12 +7,12 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 
 
 export default function FormularioEvento() {
-  const [titulo, setTitulo] = useState('');
-  const [descripcion, setDescripcion] = useState('');
-  const [fecha, setFecha] = useState(new Date());
-  const [hora, setHora] = useState(new Date())
-  const [showDatePicker, setShowDatePicker] = useState(false);
-  const [showTimePicker, setShowTimePicker] = useState(false);
+  const [titulo, setTitulo] =useState('')
+  const [descripcion, setDescripcion] = useState('')
+  const [fecha, setFecha] =useState(new Date())
+  const [hora, setHora] =useState(new Date())
+  const [showDatePicker, setShowDatePicker] = useState(false)
+  const [showTimePicker, setShowTimePicker] = useState(false)
   const [foto, setFoto] = useState<string | undefined>(undefined);
   const { agregarEvento } = useContextEvento();
   const navigation = useNavigation()
@@ -35,7 +35,7 @@ export default function FormularioEvento() {
       return;
     }
 
-    const eventDate = new Date(
+    const eventDate= new Date(
         fecha.getFullYear(),
         fecha.getMonth(),
         fecha.getDate(),
@@ -43,15 +43,15 @@ export default function FormularioEvento() {
         hora.getMinutes()
     )
 
-    const formData = new FormData()
+    const formData= new FormData()
     formData.append('titulo', titulo)
     formData.append('descripcion', descripcion)
     formData.append('fecha', fecha.toISOString())
     formData.append('hora', hora.toISOString());
 
-    if (foto) {
-      const filename = foto.split('/').pop();
-      const match = /\.(\w+)$/.exec(filename || '');
+    if(foto){
+      const filename= foto.split('/').pop();
+      const match= /\.(\w+)$/.exec(filename || '')
       const type = match ? `image/${match[1]}` : 'image';
       formData.append('foto', {
         uri: foto,
@@ -63,8 +63,8 @@ export default function FormularioEvento() {
     navigation.goBack();
   }
 
-  const tomarFoto = async () => {
-    const { status } = await ImagePicker.requestCameraPermissionsAsync();
+  const tomarFoto = async () =>{
+    const { status } = await ImagePicker.requestCameraPermissionsAsync()
     if (status !== 'granted') {
       Alert.alert('Permiso denegado', 'Necesitas dar permiso para acceder a la camara')
       return;

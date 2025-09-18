@@ -3,9 +3,9 @@ import { View, Text, Switch, StyleSheet } from "react-native";
 import { useNotificaciones } from "../../Providers/ProviderNotificacion";
 
 const NotificationsScreen: React.FC = () => {
-  const { notificacionesHabilitadas, setNotificacionesHabilitadas } = useNotificaciones();
+  const { notificacionesHabilitadas, setNotificacionesHabilitadas} = useNotificaciones()
 
-  const handleToggle = () => {
+  const handleToggle = ()=>{
     setNotificacionesHabilitadas(!notificacionesHabilitadas);
   };
 
@@ -25,9 +25,9 @@ const NotificationsScreen: React.FC = () => {
 
 export default NotificationsScreen;
 
-const styles = StyleSheet.create({
+const styles =StyleSheet.create({
   container: {
-    flex: 1,
+    flex:1,
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: "#fff",
