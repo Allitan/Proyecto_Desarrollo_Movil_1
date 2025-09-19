@@ -57,7 +57,7 @@ export default function ProviderEvento({ children }: Props) {
 
                     await Notifications.scheduleNotificationAsync({
                         content: {
-                            title: `¡Recordatorio de evento! 🔔`,
+                            title: `¡Recordatorio de evento!`,
                             body: `No olvides tu evento: ${newEvent.titulo}`,
                         },
                         trigger,
